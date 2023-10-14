@@ -56,7 +56,18 @@ pytest test_filename.py -s -v -m "marker_name" --browser_name=firefox --html=pat
 | `--browser_name="browser_name"` | `optional` | To select the browser at run time  \| **Accepted values** : [ch, ff, chrome, firefox, Chrome, Firefox]|
 | `--html="Path/file_name.html"` | `optional` | To generate the html report at given path  |
 
+## Generating Allure Reports
 
+Allure command line should be installed in local system, to generate the Allure reports executed following command
+
+```bash
+pytest test_filename.py --alluredir="./path_to_generate_json_files"
+```
+
+Now once all the tests are completed and results are stored in JSON files we can run following to show the allure reports. 
+```bash
+allure serve '/path_of_generated_json_files'
+```
 
 ## Features
 
