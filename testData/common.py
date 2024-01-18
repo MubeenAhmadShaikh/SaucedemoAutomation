@@ -1,0 +1,8 @@
+URL = "https://www.saucedemo.com"
+STANDARD_USER = "standard_user"
+STANDARD_PASSWORD = "secret_sauce"
+PROBLEM_USER = "problem_user"
+LOCKED_OUT_USER = "locked_out_user"
+INVALID_USER = "standard_use"
+INVALID_PASSWORD = "secret_sauc"
+GLITCH_USER = "performance_glitch_user"
