@@ -1,6 +1,7 @@
-import time
 
+import allure
 import pytest
+from allure_commons.types import AttachmentType
 from PageObjects.CartPage import CartPage
 from PageObjects.ProductListPage import ProductsListPage
 from utilities.BaseClass import BaseClass
@@ -46,6 +47,7 @@ class TestCheckoutInformationPage(BaseClass):
             log.info("Error is displayed for first name: "+error)
         except AssertionError:
             log.error("Error message is not displayed for first Name or no message is displayed at all")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Error message is not displayed for first Name or no message is displayed at all")
         log.info("Now enter only first Name this time ")
         checkout_form_page.enter_first_name("John")
@@ -59,8 +61,8 @@ class TestCheckoutInformationPage(BaseClass):
             log.info("Error is displayed for last name : " + error)
         except AssertionError:
             log.error("Error message is not displayed for last Name or no message is displayed at all")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Error message is not displayed for last Name or no message is displayed at all")
-
         log.info("Now enter first Name and lastname this time ")
         checkout_form_page.enter_last_name("wick")
         checkout_form_page.click_on_continue_button()
@@ -74,6 +76,7 @@ class TestCheckoutInformationPage(BaseClass):
             log.info("Error is displayed for Postal code : " + error)
         except AssertionError:
             log.error("Error message is not displayed for postal code or no message is displayed at all")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Error message is not displayed for postal code or no message is displayed at all")
 
         log.info("Now enter all the details and click on submit")
@@ -85,6 +88,7 @@ class TestCheckoutInformationPage(BaseClass):
             log.info("User is successfully navigated to checkout overview page")
         except AssertionError:
             log.error("User is not navigated to checkout overview page")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("User is not navigated to checkout overview page")
 
     def test_cancel(self, get_logger):
@@ -114,6 +118,7 @@ class TestCheckoutInformationPage(BaseClass):
             log.info("user is navigated back to Cart page")
         except NoSuchElementException:
             log.error("User is not navigated to cart page")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("User is not navigated to cart page")
 
     def test_information_form_negative(self, get_logger):
@@ -145,6 +150,7 @@ class TestCheckoutInformationPage(BaseClass):
             log.info("User is unable to proceed with invalid data")
         except AssertionError:
             log.error("User is able to proceed with entering invalid information data")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("User is able to proceed with entering invalid information data")
 
 

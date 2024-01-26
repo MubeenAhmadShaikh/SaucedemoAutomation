@@ -1,5 +1,6 @@
+import allure
 import pytest
-
+from allure_commons.types import AttachmentType
 from PageObjects.ProductListPage import ProductsListPage
 from utilities.BaseClass import BaseClass
 
@@ -26,6 +27,7 @@ class TestProductsPage(BaseClass):
             log.info("Products are sorted successfully")
         except AssertionError:
             log.error("Products are not sorted")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Products are not sorted as expected")
 
     def test_sort_z_to_a(self, get_logger):
@@ -49,6 +51,7 @@ class TestProductsPage(BaseClass):
             log.info("Products are sorted from z-to-a")
         except AssertionError:
             log.error("Products are not sorted in z-to-a")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Products are not sorted as expected")
 
     def test_sort_low_to_high(self, get_logger):
@@ -72,6 +75,7 @@ class TestProductsPage(BaseClass):
             log.info("Products are sorted from low-to-high")
         except AssertionError:
             log.error("Products are not sorted from low-to-high")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Products are not sorted from low-to-high")
 
     def test_sort_high_to_low(self, get_logger):
@@ -95,6 +99,7 @@ class TestProductsPage(BaseClass):
             log.info("Products are sorted successfully from high-to-low pricing")
         except AssertionError:
             log.error("Products are not sorted high-to-low in pricing")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Products are not sorted high-to-low in pricing")
 
     def test_add_to_cart_all_products(self, get_logger):
@@ -114,6 +119,7 @@ class TestProductsPage(BaseClass):
             log.info("Successfully added all the products to cart")
         except AssertionError:
             log.error("Unable to add all the products to cart")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Unable to add all the products to cart")
         products_page.empty_cart()
 
@@ -125,6 +131,7 @@ class TestProductsPage(BaseClass):
         self.perform_complete_login()
         log.info("User logged in successfully")
         products_page = ProductsListPage(self.driver)
+        products_page.empty_cart()
         remove_buttons = products_page.get_all_remove_buttons()
         log.info("Check no remove buttons should be displayed at start")
         assert len(remove_buttons) == 0
@@ -142,6 +149,7 @@ class TestProductsPage(BaseClass):
             log.info("All the remove buttons are functioning properly")
         except AssertionError:
             log.error("Remove buttons are not functioning properly")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Remove buttons are not functioning properly")
 
     def test_add_to_cart_by_title(self, get_logger):
@@ -162,6 +170,7 @@ class TestProductsPage(BaseClass):
             log.info("Product with given title is added to cart")
         except AssertionError:
             log.error("Product with given title is not added to cart")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Product with given title is not added to cart")
         products_page.empty_cart()
 
@@ -184,5 +193,6 @@ class TestProductsPage(BaseClass):
             log.info("Products with the given price is added to cart")
         except AssertionError:
             log.error("Product with given price is not added to cart")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Product with given price is not added to cart")
         products_page.empty_cart()

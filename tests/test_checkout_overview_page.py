@@ -1,7 +1,6 @@
-import time
-
+import allure
 import pytest
-
+from allure_commons.types import AttachmentType
 from PageObjects.CartPage import CartPage
 from PageObjects.CheckoutFormPage import CheckoutFormPage
 from PageObjects.ProductDetailsPage import ProductDetailsPage
@@ -47,12 +46,14 @@ class TestCheckoutOverviewPage(BaseClass):
             checkout_overview_page.click_on_finish_button()
         except AssertionError:
             log.error("There is unexpected item total, total or products mentioned on checkout overview page")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("There is unexpected item total, total or products mentioned on checkout overview page")
         try:
             assert 'Thank you' in checkout_overview_page.get_thankyou_message()
             log.info("Thank you message is displayed")
         except AssertionError:
             log.error("Thank you message is not displayed")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Thank You message is not displayed")
 
     def test_checkout_one_item(self, get_logger):
@@ -93,12 +94,14 @@ class TestCheckoutOverviewPage(BaseClass):
             checkout_overview_page.click_on_finish_button()
         except AssertionError:
             log.error("There is unexpected item total, total or products mentioned on checkout overview page")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("There is unexpected item total, total or products mentioned on checkout overview page")
         try:
             assert 'Thank you' in checkout_overview_page.get_thankyou_message()
             log.info("Thank you message is displayed")
         except AssertionError:
             log.error("Thank you message is not displayed")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Thank You message is not displayed")
 
     def test_cancel_button(self, get_logger):
@@ -127,6 +130,7 @@ class TestCheckoutOverviewPage(BaseClass):
             log.info(" user is on home page and Products heading is displayed")
         except AssertionError:
             log.error("User is not on home page or Products title is not displayed")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("User is not on home page or Products title is not displayed")
 
     def test_checkout_with_zero_total(self, get_logger):
@@ -153,4 +157,5 @@ class TestCheckoutOverviewPage(BaseClass):
             log.info("User is unable to proceed with having order total as 0")
         except AssertionError:
             log.error("User is able to proceed with finish order when total is 0")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("User is able to proceed with finish order when total is 0")

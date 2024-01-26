@@ -1,6 +1,7 @@
+import allure
 import time
-
 import pytest
+from allure_commons.types import AttachmentType
 from selenium.common.exceptions import NoSuchElementException
 from testData.UserCredentials import UserCreds
 import testData.common as common
@@ -33,13 +34,17 @@ class TestLoginPage(BaseClass):
         try:
             assert login_page.title_exists()
             log.info("Products title exist, Login verification successful")
-        except NoSuchElementException:
+        except (AssertionError, NoSuchElementException):
+            log.error("User is unable to login error displayed as: " + login_page.get_error_message_text())
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             try:
                 assert login_page.error_message_exist()
-                log.info(login_page.get_error_message_text())
-            except NoSuchElementException:
+                log.info("error message is displayed : "+login_page.get_error_message_text())
+            except (AssertionError, NoSuchElementException):
                 log.error("Error message not displayed for invalid credentials")
+                allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
                 pytest.fail("Error message for invalid credentials should be displayed")
+            pytest.fail("User is unable to login error message displayed successfully")
         log.info("Closing the browser")
 
     @pytest.mark.negative
@@ -69,9 +74,10 @@ class TestLoginPage(BaseClass):
             log.info("Verify user is unable to login and error message displayed is " +
                      login_page.get_error_message_text())
             log.info(login_page.get_error_message_text())
-        except NoSuchElementException:
+        except (AssertionError,NoSuchElementException):
             log.error("Invalid login credentials and error message also not displayed")
-            pytest.fail("Error message also not displayed for invalid credentials")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
+            pytest.fail("Error message not displayed for invalid credentials")
         log.info("Closing the browser")
 
     @pytest.mark.positive
@@ -95,8 +101,9 @@ class TestLoginPage(BaseClass):
         try:
             assert login_page.title_exists()
             log.info("User successfully logged in and Products title is displayed")
-        except NoSuchElementException:
+        except (AssertionError, NoSuchElementException):
             log.error("'Products' title is not displayed or user is not redirected to home page")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("'Products' title not displayed or user is not redirected to home page")
         log.info("Closing the browser")
 
@@ -120,8 +127,9 @@ class TestLoginPage(BaseClass):
         try:
             assert login_page.title_exists()
             log.info("User successfully logged in and Products title is displayed")
-        except NoSuchElementException:
+        except (AssertionError, NoSuchElementException):
             log.error("'Products title is not displayed or user is not redirected to home page'")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("'Products' title is not displayed or user is not redirected to home page")
         log.info("Closing the browser")
 
@@ -148,8 +156,9 @@ class TestLoginPage(BaseClass):
             assert login_page.error_message_exist()
             assert "locked out" in login_page.get_error_message_text()
             log.info("Error message is displayed as expected"+login_page.get_error_message_text())
-        except NoSuchElementException:
+        except (AssertionError, NoSuchElementException):
             log.error("Error message for locked out user is not displayed")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Error message for locked out user is not displayed")
         log.info("Closing the browser")
 
@@ -177,8 +186,9 @@ class TestLoginPage(BaseClass):
             assert login_page.title_exists()
             log.info("User is able to login successfully using performance glitch and 'Products' title also displayed "
                      "and the delay was of "+str(delay))
-        except NoSuchElementException:
+        except (AssertionError, NoSuchElementException):
             log.error("'Products title is not displayed or user is not redirected to home page'")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("'Products' title is not displayed or user is not redirected to home page")
         log.info("Closing the browser")
 

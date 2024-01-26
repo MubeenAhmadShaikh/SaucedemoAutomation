@@ -1,6 +1,7 @@
 import random
 import time
-
+from allure_commons.types import AttachmentType
+import allure
 import pytest
 
 
@@ -29,6 +30,8 @@ class TestCartPage(BaseClass):
             log.info("Cart page heading is displayed as expected")
         except AssertionError:
             log.error("Cart page heading is not displayed")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence",
+                          attachment_type=AttachmentType.PNG)
             pytest.fail("Cart page heading is not displayed")
 
     def test_checkout_button(self, get_logger):
@@ -51,9 +54,13 @@ class TestCartPage(BaseClass):
                 log.info("Checkout button is working as expected")
             except AssertionError:
                 log.error("Checkout button is not functioning properly")
+                allure.attach(self.driver.get_screenshot_as_png(), "evidence",
+                              attachment_type=AttachmentType.PNG)
                 pytest.fail("Checkout button is not functioning properly")
         except AssertionError:
             log.error("Cart page heading is not displayed")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence",
+                          attachment_type=AttachmentType.PNG)
             pytest.fail("Cart page heading is not displayed")
 
     def test_continue_shopping(self, get_logger):
@@ -89,9 +96,13 @@ class TestCartPage(BaseClass):
                 self.capture_screenshot("images/continue.png")
             except AssertionError:
                 log.error("Cart items are not same as selected")
+                allure.attach(self.driver.get_screenshot_as_png(), "evidence",
+                              attachment_type=AttachmentType.PNG)
                 pytest.fail("Cart items are not same as selected")
         except AssertionError:
             log.error("User is not navigate to PLP after clicking on Continue shopping")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence",
+                          attachment_type=AttachmentType.PNG)
             pytest.fail("User is not navigate to PLP after clicking on Continue shopping")
 
     def test_remove_from_cart(self, get_logger):
@@ -128,8 +139,13 @@ class TestCartPage(BaseClass):
                     log.info("Cart items on PLP and actual cart have same data")
                 except AssertionError:
                     log.error("Error or mismatch in cart items on PLP and cart")
+                    allure.attach(self.driver.get_screenshot_as_png(), "evidence",
+                                  attachment_type=AttachmentType.PNG)
+                    pytest.fail("cart item count is not as expected")
             except AssertionError:
                 log.info("cart item count is not as expected")
+                allure.attach(self.driver.get_screenshot_as_png(), "evidence",
+                              attachment_type=AttachmentType.PNG)
                 pytest.fail("cart item count is not as expected")
 
     def test_empty_cart_checkout(self, get_logger):
@@ -140,14 +156,10 @@ class TestCartPage(BaseClass):
         self.perform_complete_login()
         log.info("User logged in successfully")
         cart_page = CartPage(self.driver)
-        pdp = ProductDetailsPage(self.driver)
         log.info("Step 2: Add a product to cart")
         plp = ProductsListPage(self.driver)
-        pdp.add_random_product_to_cart()
         plp.empty_cart()
-        pdp.add_random_product_to_cart()
-        pdp.click_remove_button()
-        pdp.click_on_cart_button()
+        plp.click_cart_button()
         log.info("Verify on cart page the heading of Cart is displayed")
         try:
             assert len(cart_page.get_cart_items()) == 0
@@ -158,7 +170,9 @@ class TestCartPage(BaseClass):
                 log.info("User is unable to proceed with the cart having 0 items as expected")
             except AssertionError:
                 log.error("User is able to proceed having cart with 0 items")
+                allure.attach(self.driver.get_screenshot_as_png(), "CheckoutFormPage", attachment_type=AttachmentType.PNG)
                 pytest.fail("User is able to proceed having cart with 0 items")
         except AssertionError:
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             log.error("Cart page is not empty even after removing all the products")
             pytest.fail("Cart page is not empty even after removing all the products")

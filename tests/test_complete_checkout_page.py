@@ -1,5 +1,6 @@
+import allure
 import pytest
-
+from allure_commons.types import AttachmentType
 from utilities.BaseClass import BaseClass
 from PageObjects.ProductListPage import ProductsListPage
 from PageObjects.CartPage import CartPage
@@ -40,6 +41,7 @@ class TestCompleteCheckoutPage(BaseClass):
             log.info("User navigated to inventory page successfully")
         except AssertionError:
             log.error("user is not redirected to home/inventory page")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("user is not redirected to home/inventory page")
 
     def test_success_message(self, get_logger):
@@ -69,6 +71,7 @@ class TestCompleteCheckoutPage(BaseClass):
             log.info("Thank you message is displayed")
         except AssertionError:
             log.error("Thank you message is not displayed")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Thank you message is not displayed")
 
     def test_title(self, get_logger):
@@ -99,4 +102,5 @@ class TestCompleteCheckoutPage(BaseClass):
             log.info("Complete! is displayed")
         except AssertionError:
             log.error("Complete! is not displayed as title on checkout complete page")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Complete! is not displayed as title on checkout complete page")

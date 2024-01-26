@@ -1,6 +1,6 @@
-import time
-
+import allure
 import pytest
+from allure_commons.types import AttachmentType
 from PageObjects.CartPage import CartPage
 from selenium.webdriver.common.by import By
 
@@ -31,6 +31,7 @@ class TestE2E(BaseClass):
                 log.info("All products added to cart")
             except AssertionError:
                 log.error("All products are not added to cart")
+                allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
                 pytest.fail("All products are not added to cart")
         elif scenario == 'purchase_lowest_price_product':
             log.info("Verify user is able to complete the end to end purchasing of lowest price product")
@@ -47,6 +48,7 @@ class TestE2E(BaseClass):
                 log.info("Lowest price products are added to cart")
             except AssertionError:
                 log.error("lowest price products are not added to cart")
+                allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
                 pytest.fail("lowest price products are not added to cart")
 
         elif scenario == 'purchase_highest_price_product':
@@ -64,6 +66,7 @@ class TestE2E(BaseClass):
                 log.info("highest price products are added to cart")
             except AssertionError:
                 log.error("highest price products are not added to cart")
+                allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
                 pytest.fail("highest price products are not added to cart")
 
         elif scenario == 'purchase_mid_price_product':
@@ -74,7 +77,6 @@ class TestE2E(BaseClass):
             avg_price = prices[int(len(prices)/2)].text
             print(avg_price)
             products = products_list_page.add_to_cart_product_by_price(avg_price[1:])
-            time.sleep(2)
             cart_icons = products_list_page.get_number_of_cart_items()
             log.info("Verify medium price product added to cart if two products have same price 2 products will"
                      " be added")
@@ -83,6 +85,7 @@ class TestE2E(BaseClass):
                 log.info("medium price products are added to cart")
             except AssertionError:
                 log.error("medium price products are not added to cart")
+                allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
                 pytest.fail("medium price products are not added to cart")
 
         elif scenario == "purchase_product_by_name":
@@ -96,6 +99,7 @@ class TestE2E(BaseClass):
                 log.info("product is added to cart")
             except AssertionError:
                 log.error("product is not added to cart")
+                allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
                 pytest.fail("product is not added to cart")
         elif scenario == "purchase_product_by_price":
             log.info("Verify user is able to complete the end to end purchasing a product by its price")
@@ -108,16 +112,18 @@ class TestE2E(BaseClass):
                 log.info("product is added to cart")
             except AssertionError:
                 log.error("product is not added to cart")
+                allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
                 pytest.fail("product is not added to cart")
 
         # cart_page = products_list_page.getCartButton()
         products_list_page.click_cart_button()
         cart_page = CartPage(self.driver)
-        assert 'cart' in self.driver.current_url
+        assert 'cart' in self.driver.current_url, log.error("cart is not present in the url of cart_page")
         cart_page.click_checkout_button()
         checkout_form_page = CheckoutFormPage(self.driver)
         # Cart page validations
-        assert ('checkout' and 'one') in self.driver.current_url
+        assert ('checkout' and 'one') in self.driver.current_url, (
+            log.error("checkout text is not present in the url of checkout One page"))
         checkout_form_page.enter_first_name("John")
         checkout_form_page.enter_last_name("Wick")
         checkout_form_page.enter_post_code("2154")
@@ -127,17 +133,20 @@ class TestE2E(BaseClass):
         self.driver.set_window_size(size('Width'), size('Height'))  # May need manual adjustment
         self.driver.find_element(By.TAG_NAME, 'body').screenshot('images/checkout_page.png')
 
-        assert ('checkout' and 'two') in self.driver.current_url
+        assert ('checkout' and 'two') in self.driver.current_url, (
+            log.error("checkout text is not present in the url of checkout two page"))
         # Checkout final page validations
         checkout_complete_page = checkout_page.click_on_finish_button()
         # checkout_complete_page = CheckoutCompletePage(self.driver)
-        assert ('checkout' and 'complete') in self.driver.current_url
-        time.sleep(3)
+        assert ('checkout' and 'complete') in self.driver.current_url, (
+            log.error("checkout text is not present in the url of checkout complete page"))
         # Checkout final page validations
         success_message = checkout_complete_page.get_success_message()
-        assert "Thank you" in success_message
+        assert "Thank you" in success_message, (
+            log.error("Thank you text is not present in the success message"))
         checkout_complete_page.click_on_back_button()
-        assert "inventory" in self.driver.current_url
+        assert "inventory" in self.driver.current_url, (
+            log.error("inventory text is not present in the url of home page"))
 
     def test_purchase_all_products(self, get_logger):
         self.e2e_purchase("purchase_all_product", get_logger)

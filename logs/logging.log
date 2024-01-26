@@ -1,7 +1,0 @@
-2024-01-19 03:20:12,434 - [test_cart_page] - [test_cart_page.py:138] - [test_empty_cart_checkout - [INFO] - Verify user is not able to proceed if cart is empty.
-2024-01-19 03:20:12,435 - [test_cart_page] - [test_cart_page.py:139] - [test_empty_cart_checkout - [INFO] - Step 1: Perform complete login using valid credentials
-2024-01-19 03:20:16,062 - [test_cart_page] - [test_cart_page.py:141] - [test_empty_cart_checkout - [INFO] - User logged in successfully
-2024-01-19 03:20:16,062 - [test_cart_page] - [test_cart_page.py:144] - [test_empty_cart_checkout - [INFO] - Step 2: Add a product to cart
-2024-01-19 03:20:17,050 - [test_cart_page] - [test_cart_page.py:151] - [test_empty_cart_checkout - [INFO] - Verify on cart page the heading of Cart is displayed
-2024-01-19 03:20:17,309 - [test_cart_page] - [test_cart_page.py:155] - [test_empty_cart_checkout - [INFO] - Verify user is unable to proceed with checkout
-2024-01-19 03:20:17,386 - [test_cart_page] - [test_cart_page.py:160] - [test_empty_cart_checkout - [ERROR] - User is able to proceed having cart with 0 items

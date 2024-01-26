@@ -1,6 +1,8 @@
 import time
 
+import allure
 import pytest
+from allure_commons.types import AttachmentType
 
 from PageObjects.ProductDetailsPage import ProductDetailsPage
 from PageObjects.ProductListPage import ProductsListPage
@@ -28,8 +30,9 @@ class TestProductsDetailPage(BaseClass):
             assert product_name_on_pdp == product_name_on_plp
             assert product_price_on_pdp == product_price_on_plp
             log.info("Product name and price on PLP and PDP are in sync")
-        except AssertionError:
+        except (AssertionError, NoSuchElementException):
             log.error("Product name or price is not in sync on PDP and PLP")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Product name or price is not in sync on PDP and PLP")
 
     def test_back_to_plp(self, get_logger):
@@ -47,8 +50,9 @@ class TestProductsDetailPage(BaseClass):
         try:
             assert product_details_page.product_heading_exist()
             log.info("Products listing page is displayed with the 'Products' heading")
-        except NoSuchElementException:
+        except (AssertionError, NoSuchElementException):
             log.error("'Products' heading is not displayed and user is not redirected to PLP")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("'Products' heading is not displayed and user is not redirected to PLP")
 
     def test_add_to_cart(self, get_logger):
@@ -77,7 +81,6 @@ class TestProductsDetailPage(BaseClass):
             if first_product != second_product:
                 log.info("second product is selected")
                 log.info("Click on Add to cart on its PDP")
-                time.sleep(10)
                 product_details_page.click_add_to_cart()
                 cart_items += 1
                 log.info("Verify cart items are increased by 1")
@@ -87,8 +90,9 @@ class TestProductsDetailPage(BaseClass):
                 cart_items -= 1
                 actual_cart_items = product_plp.get_number_of_cart_items()
                 assert actual_cart_items == cart_items
-        except AssertionError:
+        except (AssertionError, NoSuchElementException):
             log.error("Add to cart is not working properly")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Add to cart is not working properly")
 
     def test_remove_button(self, get_logger):
@@ -111,6 +115,7 @@ class TestProductsDetailPage(BaseClass):
         try:
             assert actual_cart_items == cart_items
             log.info("Remove button is working as expected")
-        except AssertionError:
+        except (AssertionError, NoSuchElementException):
             log.error("Remove button is not working as expected")
+            allure.attach(self.driver.get_screenshot_as_png(), "evidence", attachment_type=AttachmentType.PNG)
             pytest.fail("Remove button is not working as expected")
